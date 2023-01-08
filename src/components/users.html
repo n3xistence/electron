@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../node_modules/@fortawesome/fontawesome-free/css/all.css">
+    <link rel="stylesheet" type="text/css" href="../../dist/users.css">
+
+    <link rel="stylesheet" href="https://unpkg.com/flowbite@1.5.5/dist/flowbite.min.css" />
+    <title>SMMO Guild Tools</title>
+</head>
+
+<body class="bg-[#2c313e]">
+    <div class="inline-block content-center w-full h-[50px] fixed z-50">
+        <!-- Top Bar -->
+        <div id='title-bar' class="pl-[50px] w-full h-[50px] fixed inline-block bg-[#64c5b1]">
+        <div id="window-buttons" class="float-right flex">
+          <button id="minimize-button"
+            class="hover:bg-[#54a594] top-0 text-white w-[50px] h-[25px] pb-[5px] focus:outline-none items-center flex justify-center text-2xl">
+            <i class="fa-solid fa-window-minimize" style="font-size: 15px"></i>
+          </button>
+          <button id="maximize-button"
+            class="hover:bg-[#54a594] top-0 text-white w-[50px] h-[25px] focus:outline-none items-center flex justify-center text-2xl">
+            <i class="fa-regular fa-window-maximize" style="font-size: 15px"></i>
+          </button>
+          <button id='exit-button'
+            class="hover:bg-red-500 top-0 text-white w-[50px] h-[25px] focus:outline-none items-center flex justify-center text-2xl">
+            <i class="fa-solid fa-xmark text-white"></i>
+          </button>
+        </div>
+        <div class="pt-[12px] pl-[10px] right-0 h-full w-[calc(100%-150px)] text-white inline-block" style="-webkit-app-region: drag">
+          SMMO Guild Tools
+        </div>
+      </div>
+
+        <!-- Menu Button -->
+        <div id="menu-toggle" class="inline-block">
+            <div id="toggle-icon">
+                <div id="menu-toggle-bar1"></div>
+                <div id="menu-toggle-bar2"></div>
+                <div id="menu-toggle-bar3"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide In Menu -->
+    <div id="menu"
+        class="w-[200px] h-[100%] top-[50px] bg-[#343c49] text-white fixed p-0 left-[-200px] block tansition-transform duration-500">
+        <div class="cursor-pointer p-[25px] w-[100%] h-[75px] rounded-bl-lg border-b-[3px] border-[#2c313e] hover:bg-[#2c313e]"
+            id="home-menu-item">
+            <i class="fa-solid fa-house !w-[25px]"></i>Home
+        </div>
+        <div class="cursor-pointer p-[25px] w-[100%] h-[75px] rounded-bl-lg border-b-[3px] border-[#2c313e] hover:bg-[#2c313e]"
+            id="stats-menu-item">
+            <i class="fa-solid fa-chart-column !w-[25px]"></i>Stats
+        </div>
+        <div class="cursor-pointer p-[25px] w-[100%] h-[75px] rounded-bl-lg border-l-[3px] border-l-white border-b-[3px] border-[#2c313e] hover:bg-[#2c313e]"
+            id="users-menu-item">
+            <i class="fa-solid fa-user !w-[25px]"></i>Users
+        </div>
+        <div class="absolute bottom-[50px] cursor-pointer p-[25px] w-[100%] h-[75px] rounded-bl-lg border-b-[3px] border-[#2c313e] hover:bg-[#2c313e]"
+            id="settings-menu-item">
+            <i class="fa-solid fa-screwdriver-wrench !w-[25px]"></i>Settings
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-content"
+        class="p-[20px] w-[100%] block absolute flex-wrap bg-[#2c313e] text-white top-[50px] left-0 right-0 bottom-0 tansition-transform duration-500">
+        <!-- Last Refresh Status-->
+        <div class="float-right bg-[#343c49] rounded align-middle relative h-[35px] text-white pl-[0.5rem]">
+            <div class="inline-block pl-[0.5rem]">Last Refresh:</div>
+            <div id="last-refresh" class="inline-block p-[5px] pr-[0.5rem]">Never</div>
+        </div>
+
+        <br></br>
+
+        <!-- SFTP Button -->
+        <div id="sftp-elements" class="float-right">
+            <button id="request-sftp" data-tooltip-target="tooltip-sftp-button"
+                class="w-[40px] h-[40px] ml-2 bg-[#64c5b1] rounded-lg hover:bg-[#54a594] focus:outline-none">
+                <i id='sftp-icon' class="fa-solid fa-rotate"></i>
+            </button>
+            <div id="tooltip-sftp-button" role="tooltip"
+                class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip ">
+                Refresh Data
+                <div class="tooltip-arrow" data-popper-arrow></div>
+            </div>
+        </div>
+      
+        <!-- User ID input field, submit button -->
+        <div class="flex float-right flex-wrap items-center bg-gray-700 rounded mb-4 min-h-[50px]">
+            <!-- User ID input -->
+            <label for="user-id-input"
+                class="m-2 justify-center text-white inline-block mb-2 text-sm font-medium text-gray-90 whitespace-nowrap">
+                User ID:</label>
+            <input type="text" id="user-id-input"
+                class="m-1 inline-block text-white h-[32px] bg-gray-800 border rounded border-transparent focus:!border-transparent focus:ring-0">
+
+            <!-- Submit Button -->
+            <button id="submit-filters" data-tooltip-target="tooltip-filters-button"
+                class="h-[40px] w-[40px] mx-2 bg-gray-800 rounded-full hover:bg-gray-600 focus:outline-none">
+                <i id="submit-filters-icon" class="fa-solid fa-magnifying-glass text-white"></i>
+            </button>
+            <div id="tooltip-filters-button" role="tooltip"
+                class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip ">
+                Submit Filters
+                <div class="tooltip-arrow" data-popper-arrow></div>
+            </div>
+        </div>
+
+        <div id="chart" class="m-[10px] clear-both">
+            <!-- Skeleton Pulse Placeholder -->
+            <div role="status" class="p-4 max-w-sm rounded border border-gray-200 shadow animate-pulse md:p-6">
+              <div class="h-2.5 bg-gray-200 rounded-full  w-32 mb-2.5"></div>
+              <div class="mb-10 w-48 h-2 bg-gray-200 rounded-full "></div>
+              <div class="flex items-baseline mt-4 space-x-6">
+                <div class="w-full h-36 bg-gray-200 rounded-t-lg "></div>
+                <div class="w-full h-24 bg-gray-200 rounded-t-lg "></div>
+                <div class="w-full h-36 bg-gray-200 rounded-t-lg "></div>
+                <div class="w-full h-24 bg-gray-200 rounded-t-lg "></div>
+                <div class="w-full h-24 bg-gray-200 rounded-t-lg "></div>
+                <div class="w-full h-36 bg-gray-200 rounded-t-lg "></div>
+                <div class="w-full h-24 bg-gray-200 rounded-t-lg "></div>
+              </div>
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+
+    </div>
+
+    <script src="https://unpkg.com/flowbite@1.5.5/dist/flowbite.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
+    <script src="users.js"></script>
+</body>
+
+</html>
