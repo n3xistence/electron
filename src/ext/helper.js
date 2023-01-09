@@ -326,3 +326,51 @@ exports.numberWithCommas = function(x) {
 exports.roundToNearest10 = function(num) {
     return Math.round(num / 10) * 10;
 }
+
+exports.dateToShortText = function(date) {
+    let args = date.split("-");
+    let day = parseInt(args[0]);
+    let month = parseInt(args[1]);
+
+    let datestring = "";
+    switch (month) {
+      case 12:
+        datestring += "Dec ";
+        break;
+      case 11:
+        datestring += "Nov ";
+        break;
+      case 10:
+        datestring += "Oct ";
+        break;
+      case 9:
+        datestring += "Sep ";
+        break;
+      case 8:
+        datestring += "Aug ";
+        break;
+      case 7:
+        datestring += "Jul ";
+        break;
+      case 6:
+        datestring += "Jun ";
+        break;
+      case 5:
+        datestring += "May ";
+        break;
+      case 4:
+        datestring += "Apr ";
+        break;
+      case 3:
+        datestring += "Mar ";
+        break;
+      case 2:
+        datestring += "Feb ";
+        break;
+      case 1:
+        datestring += "Jan ";
+        break;
+    }
+    datestring += day;
+    return datestring;
+}

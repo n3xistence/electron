@@ -75,6 +75,63 @@
 
         <br></br>
 
+        <!-- Display for weekly timeframe -->
+        <div class="float-right bg-[#343c49] rounded align-middle relative h-[35px] text-white pl-[0.5rem]">
+            <div class="inline-block pl-[0.5rem]">From:</div>
+            <div id="week1-display-timeframe" class="inline-block p-[5px] pr-[0.5rem]">Never</div>
+            <div class="inline-block pl-[0.5rem]">Until:</div>
+            <div id="week2-display-timeframe" class="inline-block p-[5px] pr-[0.5rem]">Never</div>
+        </div>
+
+        <br></br>
+
+        <div class="">
+            <!-- General Info Containera -->
+            <div
+                class="mt-1 flex gap-4 text-white text-sm font-bold font-mono leading-6 bg-stripes-violet rounded-lg flex-wrap">
+                <div id="weeklydiff-steps"
+                    class="flex-1 inline text-center rounded relative m-[10px] p-[1rem] min-w-[230px] max-w-[25%] h-[100px] bg-[#343c49]">
+                    <!-- Skeleton Pulse Placeholder -->
+                    <div role="status" class="animate-pulse">
+                        <h3 id="line1" class="h-2.5 bg-gray-200 rounded-full  w-[100%] mb-4"></h3>
+                        <div id="line2" class="h-2 bg-gray-200 rounded-full  max-w-[70%] mb-2.5"></div>
+                        <div id="line3" class="h-2 bg-gray-200 rounded-full  max-w-[80%] mb-2.5"></div>
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                <div id="weeklydiff-levels"
+                    class="flex-1 inline text-center rounded relative m-[10px] p-[1rem] min-w-[230px] max-w-[25%] h-[100px] bg-[#343c49]">
+                    <!-- Skeleton Pulse Placeholder -->
+                    <div role="status" class="animate-pulse">
+                        <div id="line1" class="h-2.5 bg-gray-200 rounded-full  w-[100%] mb-4"></div>
+                        <div id="line2" class="h-2 bg-gray-200 rounded-full  max-w-[90%] mb-2.5"></div>
+                        <div id="line3" class="h-2 bg-gray-200 rounded-full  max-w-[85%] mb-2.5"></div>
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                <div id="weeklydiff-npc"
+                    class="flex-1 inline text-center rounded relative m-[10px] p-[1rem] min-w-[230px] max-w-[25%] h-[100px] bg-[#343c49]">
+                    <!-- Skeleton Pulse Placeholder -->
+                    <div role="status" class="animate-pulse">
+                        <div id="line1" class="h-2.5 bg-gray-200 rounded-full  w-[100%] mb-4"></div>
+                        <div id="line2" class="h-2 bg-gray-200 rounded-full  max-w-[75%] mb-2.5"></div>
+                        <div id="line3" class="h-2 bg-gray-200 rounded-full  max-w-[95%] mb-2.5"></div>
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                <div id="weeklydiff-pvp"
+                    class="flex-1 inline text-center rounded relative m-[10px] p-[1rem] min-w-[230px] max-w-[25%] h-[100px] bg-[#343c49]">
+                    <!-- Skeleton Pulse Placeholder -->
+                    <div role="status" class="animate-pulse">
+                        <div id="line1" class="h-2.5 bg-gray-200 rounded-full  w-[100%] mb-4"></div>
+                        <div id="line2" class="h-2 bg-gray-200 rounded-full  max-w-[75%] mb-2.5"></div>
+                        <div id="line3" class="h-2 bg-gray-200 rounded-full  max-w-[95%] mb-2.5"></div>
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- SFTP Button -->
         <div id="sftp-elements" class="float-right">
             <button id="request-sftp" data-tooltip-target="tooltip-sftp-button"

@@ -1,4 +1,5 @@
 const { ipcRenderer } = require("electron");
+const helper = require('../ext/helper')
 
 let windowState = "flex";
 document.getElementById("exit-button").addEventListener("click", () => {
@@ -117,7 +118,8 @@ document.getElementById("request-sftp").addEventListener("click", () => {
 	let graph = document.getElementById("chart");
 	graph.innerHTML = addSkeletonPulse_Graph(graph);
 		
-	ipcRenderer.send("refresh-data");
+  let input = document.getElementById('user-id-input');
+	ipcRenderer.send("refresh-data", input.value);
 });
 
 ipcRenderer.on("sftp-connected", () => {});
@@ -244,6 +246,18 @@ ipcRenderer.on("data-user-all", (e, data) => {
   });
 });
 
+ipcRenderer.on('data-diff-weekly', (e, data) => {
+  updateStepsContainer(data);
+  updateLevelsContainer(data);
+  updateNPCContainer(data);
+  updatePVPContainer(data);
+  updateTimeframeDisplay(data.week1.dates, data.week2.dates);
+});
+
+ipcRenderer.on('loaded', (e, data) => {
+  updateTimeframeDisplay(data.week1.dates, data.week2.dates);
+});
+
 const addSkeletonPulse_Graph = (tag) => {
 	return `<div role="status" class="p-4 max-w-sm rounded border border-gray-200 shadow animate-pulse md:p-6">
 				<div class="h-2.5 bg-gray-200 rounded-full  w-32 mb-2.5"></div>
@@ -259,4 +273,242 @@ const addSkeletonPulse_Graph = (tag) => {
 				</div>
 				<span class="sr-only">Loading...</span>
 			</div>`;
+};
+
+const updateStepsContainer = (data) => {
+  let childSteps = document.getElementById("weeklydiff-steps");
+
+  let stepDiffWeek1 = data.week1.steps[data.week1.steps.length - 1] - data.week1.steps[0];
+  let stepDiffWeek2 = data.week2.steps[data.week2.steps.length - 1] - data.week2.steps[0];
+
+  let stepRatio =
+    stepDiffWeek1 > stepDiffWeek2
+      ? ((stepDiffWeek2 - stepDiffWeek1) / stepDiffWeek1 * 100).toFixed(2)
+      : Math.abs((stepDiffWeek2 - stepDiffWeek1) / stepDiffWeek1 * 100).toFixed(2);
+
+  if (stepRatio.split('.')[1] == "00") stepRatio = parseInt(stepRatio);
+
+  childSteps.innerHTML = `<div class="float-left whitespace-nowrap w-[50%]">
+      <div class="text-left">Steps:  ${
+        stepRatio > 0
+          ? `<i class="fa-solid fa-caret-up text-green-400"></i>
+            +${stepRatio}%`
+          : `<i class="fa-solid fa-caret-down text-red-700"></i>
+            ${stepRatio}%`
+      }</div>
+      <div class="text-left">Last Week: ${stepDiffWeek1}</div>
+      <div class="text-left">This Week: ${stepDiffWeek2}</div>
+    </div>
+    <div class='float-right w-[50%] h-[100%] flex items-center'>
+      <canvas id='user-steps-graph' class='max-w-[68px] ml-auto mr-0 hover:scale-110 tansition-transform duration-200'></canvas>
+    </div>
+    `;
+
+  let ctx = document.getElementById("user-steps-graph").getContext("2d");
+  new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels: ["Last Week", "This Week"],
+      datasets: [
+        {
+          label: "Step Gains",
+          data: [stepDiffWeek1, stepDiffWeek2],
+          backgroundColor: [
+            "rgba(47, 75, 124, 0.2)",
+            "rgba(249, 93, 106, 0.2)",
+          ],
+          borderColor: ["rgba(47, 75, 124, 1)", "rgba(249, 93, 106, 1)"],
+          hoverOffset: 4,
+        },
+      ],
+    },
+    options: {
+      legend: {
+        display: false,
+      },
+      maintainAspectRatio: false,
+    },
+  });
+};
+
+const updateLevelsContainer = (data) => {
+  let childLevels = document.getElementById("weeklydiff-levels");
+
+  let levelDiffWeek1 = data.week1.levels[data.week1.levels.length - 1] - data.week1.levels[0];
+  let levelDiffWeek2 = data.week2.levels[data.week2.levels.length - 1] - data.week2.levels[0];
+
+  let levelRatio =
+    levelDiffWeek1 > levelDiffWeek2
+      ? ((levelDiffWeek2 - levelDiffWeek1) / levelDiffWeek1 * 100).toFixed(2)
+      : Math.abs((levelDiffWeek2 - levelDiffWeek1) / levelDiffWeek1 * 100).toFixed(2);
+
+  if (levelRatio.split('.')[1] == "00") levelRatio = parseInt(levelRatio);
+
+  childLevels.innerHTML = `<div class="float-left whitespace-nowrap w-[50%]">
+      <div class="text-left">Levels:  ${
+        levelRatio > 0
+          ? `<i class="fa-solid fa-caret-up text-green-400"></i>
+            +${levelRatio}%`
+          : `<i class="fa-solid fa-caret-down text-red-700"></i>
+            ${levelRatio}%`
+      }</div>
+      <div class="text-left">Last Week: ${levelDiffWeek1}</div>
+      <div class="text-left">This Week: ${levelDiffWeek2}</div>
+    </div>
+    <div class='float-right w-[50%] h-[100%] flex items-center'>
+      <canvas id='user-levels-graph' class='max-w-[68px] ml-auto mr-0 hover:scale-110 tansition-transform duration-200'></canvas>
+    </div>
+    `;
+
+  let ctx = document.getElementById("user-levels-graph").getContext("2d");
+  new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels: ["Last Week", "This Week"],
+      datasets: [
+        {
+          label: "Level Gains",
+          data: [levelDiffWeek1, levelDiffWeek2],
+          backgroundColor: [
+            "rgba(47, 75, 124, 0.2)",
+            "rgba(249, 93, 106, 0.2)",
+          ],
+          borderColor: ["rgba(47, 75, 124, 1)", "rgba(249, 93, 106, 1)"],
+          hoverOffset: 4,
+        },
+      ],
+    },
+    options: {
+      legend: {
+        display: false,
+      },
+      maintainAspectRatio: false,
+    },
+  });
+};
+
+const updateNPCContainer = (data) => {
+  let childNPC = document.getElementById("weeklydiff-npc");
+
+  let npcDiffWeek1 = data.week1.npc[data.week1.npc.length - 1] - data.week1.npc[0];
+  let npcDiffWeek2 = data.week2.npc[data.week2.npc.length - 1] - data.week2.npc[0];
+
+  let npcRatio =
+    npcDiffWeek1 > npcDiffWeek2
+      ? ((npcDiffWeek2 - npcDiffWeek1) / npcDiffWeek1 * 100).toFixed(2)
+      : Math.abs((npcDiffWeek2 - npcDiffWeek1) / npcDiffWeek1 * 100).toFixed(2)
+
+  if (npcRatio.split('.')[1] == "00") npcRatio = parseInt(npcRatio);
+
+  childNPC.innerHTML = `<div class="float-left whitespace-nowrap w-[50%]">
+      <div class="text-left">NPC Kills:  ${
+        npcRatio > 0
+          ? `<i class="fa-solid fa-caret-up text-green-400"></i>
+            +${npcRatio}%`
+          : `<i class="fa-solid fa-caret-down text-red-700"></i>
+            ${npcRatio}%`
+      }</div>
+      <div class="text-left">Last Week: ${npcDiffWeek1}</div>
+      <div class="text-left">This Week: ${npcDiffWeek2}</div>
+    </div>
+    <div class='float-right w-[50%] h-[100%] flex items-center'>
+      <canvas id='user-npc-graph' class='max-w-[68px] ml-auto mr-0 hover:scale-110 tansition-transform duration-200'></canvas>
+    </div>
+    `;
+
+  let ctx = document.getElementById("user-npc-graph").getContext("2d");
+  new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels: ["Last Week", "This Week"],
+      datasets: [
+        {
+          label: "NPC Gains",
+          data: [npcDiffWeek1, npcDiffWeek2],
+          backgroundColor: [
+            "rgba(47, 75, 124, 0.2)",
+            "rgba(249, 93, 106, 0.2)",
+          ],
+          borderColor: ["rgba(47, 75, 124, 1)", "rgba(249, 93, 106, 1)"],
+          hoverOffset: 4,
+        },
+      ],
+    },
+    options: {
+      legend: {
+        display: false,
+      },
+      maintainAspectRatio: false,
+    },
+  });
+};
+
+const updatePVPContainer = (data) => {
+  let childPVP = document.getElementById("weeklydiff-pvp");
+
+  let pvpDiffWeek1 = data.week1.pvp[data.week1.pvp.length - 1] - data.week1.pvp[0];
+  let pvpDiffWeek2 = data.week2.pvp[data.week2.pvp.length - 1] - data.week2.pvp[0];
+
+  let pvpRatio =
+    pvpDiffWeek1 > pvpDiffWeek2
+      ? ((pvpDiffWeek2 - pvpDiffWeek1) / pvpDiffWeek1 * 100).toFixed(2)
+      : Math.abs((pvpDiffWeek2 - pvpDiffWeek1) / pvpDiffWeek1 * 100).toFixed(2);
+
+  if (pvpRatio.split('.')[1] == "00") pvpRatio = parseInt(pvpRatio);
+      
+  childPVP.innerHTML = `<div class="float-left whitespace-nowrap w-[50%]">
+      <div class="text-left">PVP Kills:  ${
+        pvpRatio > 0
+          ? `<i class="fa-solid fa-caret-up text-green-400"></i>
+            +${pvpRatio}%`
+          : `<i class="fa-solid fa-caret-down text-red-700"></i>
+            ${pvpRatio}%`
+      }</div>
+      <div class="text-left">Last Week: ${pvpDiffWeek1}</div>
+      <div class="text-left">This Week: ${pvpDiffWeek2}</div>
+    </div>
+    <div class='float-right w-[50%] h-[100%] flex items-center'>
+      <canvas id='user-pvp-graph' class='max-w-[68px] ml-auto mr-0 hover:scale-110 tansition-transform duration-200'></canvas>
+    </div>
+    `;
+
+  let ctx = document.getElementById("user-pvp-graph").getContext("2d");
+  new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels: ["Last Week", "This Week"],
+      datasets: [
+        {
+          label: "PVP Gains",
+          data: [pvpDiffWeek1, pvpDiffWeek2],
+          backgroundColor: [
+            "rgba(47, 75, 124, 0.2)",
+            "rgba(249, 93, 106, 0.2)",
+          ],
+          borderColor: ["rgba(47, 75, 124, 1)", "rgba(249, 93, 106, 1)"],
+          hoverOffset: 4,
+        },
+      ],
+    },
+    options: {
+      legend: {
+        display: false,
+      },
+      maintainAspectRatio: false,
+    },
+  });
+};
+
+const updateTimeframeDisplay = (week1, week2) => {
+  let w1Display = document.getElementById('week1-display-timeframe');
+  let w2Display = document.getElementById('week2-display-timeframe');
+
+  let week1Timeframe = 
+    `${helper.dateToShortText(week1[0])} - ${helper.dateToShortText(week1[week1.length - 1])}`
+
+  let week2Timeframe = 
+    `${helper.dateToShortText(week2[0])} - ${helper.dateToShortText(week2[week2.length - 1])}`
+
+  w1Display.innerText = week1Timeframe;
+  w2Display.innerText = week2Timeframe;
 };

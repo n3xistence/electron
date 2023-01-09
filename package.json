@@ -1,7 +1,7 @@
 {
   "name": "smmo-gt",
   "productName": "SMMO-GT Babel",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Analyze data of the guild in an easy, lightweight way.",
   "main": "src/index.js",
   "scripts": {

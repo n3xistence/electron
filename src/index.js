@@ -41,9 +41,10 @@ const createMainWindow = () => {
 		},
 	});
 
+	//initialize window
 	mainWindow.loadURL(`file://${__dirname}/components/home.html`);
 
-	mainWindow.webContents.openDevTools();
+	// mainWindow.webContents.openDevTools();
 
 	mainWindow.once("ready-to-show", () => {
 		mainWindow.show();
@@ -81,6 +82,10 @@ const createMainWindow = () => {
 		} else if (pageURL === "users.html"){
 			let stamp = getTimeStamp();
 			mainWindow.webContents.send("last-sync", stamp);
+
+			let userdata = getUserAlltimeStats("261266");
+			let weeklystats = getUserRecentWeeklyData(userdata);
+			mainWindow.webContents.send('loaded', weeklystats);
 		}
 	});
 };
@@ -156,6 +161,9 @@ ipcMain.on("refresh-data", async (e, arg) => {
 				if (arg){
 					let userdata = getUserAlltimeStats(arg);
 					e.sender.send('data-user-all', userdata);
+
+					let weeklydata = getUserRecentWeeklyData(userdata);
+					e.sender.send('data-diff-weekly', weeklydata);
 				}
 
 				mainWindow.webContents.send("last-sync", getTimeStamp());
@@ -217,6 +225,9 @@ ipcMain.on("request-dropdown-data", (e, data) => {
 ipcMain.on('request-userdata-full', (e, id) => {
 	let userdata = getUserAlltimeStats(id);
 	e.sender.send('data-user-all', userdata);
+
+	let weeklydata = getUserRecentWeeklyData(userdata);
+	e.sender.send('data-diff-weekly', weeklydata);
 })
 
 ipcMain.on("request-live-steps", (e) => {
@@ -436,3 +447,54 @@ const getTimeStamp = () => {
 	}
 	return "Just Now";
 };
+
+const getUserRecentWeeklyData = (userdata) => {
+	let weeklydata = {
+		week1: {
+			steps: [],
+			levels: [],
+			npc: [],
+			pvp: [],
+			quests: [],
+			tasks: [],
+			bosses: [],
+			bounties: [],
+			dates: [],
+		},
+		week2: {
+			steps: [],
+			levels: [],
+			npc: [],
+			pvp: [],
+			quests: [],
+			tasks: [],
+			bosses: [],
+			bounties: [],
+			dates: [],
+		},
+	};
+	for (let i = userdata.dates.length - 1;i >= 0;i--){
+		if (weeklydata.week2.dates.length < 7){ 
+			weeklydata.week2.levels.unshift(userdata.levels[i]);
+			weeklydata.week2.steps.unshift(userdata.steps[i]);
+			weeklydata.week2.npc.unshift(userdata.npc[i])
+			weeklydata.week2.pvp.unshift(userdata.pvp[i])
+			weeklydata.week2.quests.unshift(userdata.quests[i])
+			weeklydata.week2.tasks.unshift(userdata.tasks[i])
+			weeklydata.week2.bosses.unshift(userdata.bosses[i])
+			weeklydata.week2.bounties.unshift(userdata.bounties[i])
+			weeklydata.week2.dates.unshift(userdata.dates[i])
+		} else if (weeklydata.week1.dates.length < 7){
+			weeklydata.week1.levels.unshift(userdata.levels[i]);
+			weeklydata.week1.steps.unshift(userdata.steps[i]);
+			weeklydata.week1.npc.unshift(userdata.npc[i])
+			weeklydata.week1.pvp.unshift(userdata.pvp[i])
+			weeklydata.week1.quests.unshift(userdata.quests[i])
+			weeklydata.week1.tasks.unshift(userdata.tasks[i])
+			weeklydata.week1.bosses.unshift(userdata.bosses[i])
+			weeklydata.week1.bounties.unshift(userdata.bounties[i])
+			weeklydata.week1.dates.unshift(userdata.dates[i])
+		} else { i = -1; continue; }
+	}
+	return weeklydata;
+}
