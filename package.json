@@ -6,7 +6,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "electron-forge start .",
-    "watch": "concurrently --kill-others \"npx tailwindcss -i ./src/components/stats.css -o ./dist/stats.css --watch\"  \"nodemon --ignore ./data/ --exec electron-forge start .\"",
+    "watch": "concurrently --kill-others \"npx tailwindcss -i ./src/components/users.css -o ./dist/users.css --watch\"  \"nodemon --ignore ./data/ --exec electron-forge start .\"",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish"

@@ -994,6 +994,10 @@ input[type="range"]::-ms-fill-lower{
   bottom: 0px;
 }
 
+.left-\[10px\]{
+  left: 10px;
+}
+
 .z-50{
   z-index: 50;
 }
@@ -1046,6 +1050,36 @@ input[type="range"]::-ms-fill-lower{
   margin-bottom: 0.25rem;
 }
 
+.my-4{
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.mx-4{
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.mx-\[10px\]{
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.mx-\[20px\]{
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.\!mx-\[10px\]{
+  margin-left: 10px !important;
+  margin-right: 10px !important;
+}
+
+.my-\[10px\]{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
 .mt-\[18px\]{
   margin-top: 18px;
 }
@@ -1096,6 +1130,18 @@ input[type="range"]::-ms-fill-lower{
 
 .mr-0{
   margin-right: 0px;
+}
+
+.mt-\[10px\]{
+  margin-top: 10px;
+}
+
+.mb-\[10px\]{
+  margin-bottom: 10px;
+}
+
+.\!mr-0{
+  margin-right: 0px !important;
 }
 
 .block{
@@ -1178,6 +1224,10 @@ input[type="range"]::-ms-fill-lower{
   height: 6rem;
 }
 
+.h-\[35\]{
+  height: 35;
+}
+
 .min-h-\[50px\]{
   min-height: 50px;
 }
@@ -1232,6 +1282,14 @@ input[type="range"]::-ms-fill-lower{
 
 .w-\[50\%\]{
   width: 50%;
+}
+
+.w-\[35\]{
+  width: 35;
+}
+
+.w-\[35px\]{
+  width: 35px;
 }
 
 .min-w-\[230px\]{
@@ -1469,6 +1527,22 @@ input[type="range"]::-ms-fill-lower{
   padding: 1rem;
 }
 
+.p-\[7px\]{
+  padding: 7px;
+}
+
+.p-\[6px\]{
+  padding: 6px;
+}
+
+.p-2{
+  padding: 0.5rem;
+}
+
+.p-\[0\.4rem\]{
+  padding: 0.4rem;
+}
+
 .py-2{
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
@@ -1494,6 +1568,11 @@ input[type="range"]::-ms-fill-lower{
   padding-right: 1rem;
 }
 
+.px-\[10px\]{
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
 .pl-\[50px\]{
   padding-left: 50px;
 }
@@ -1516,6 +1595,26 @@ input[type="range"]::-ms-fill-lower{
 
 .pr-\[0\.5rem\]{
   padding-right: 0.5rem;
+}
+
+.pt-\[2px\]{
+  padding-top: 2px;
+}
+
+.pt-\[5px\]{
+  padding-top: 5px;
+}
+
+.\!pt-\[5px\]{
+  padding-top: 5px !important;
+}
+
+.pt-1{
+  padding-top: 0.25rem;
+}
+
+.pt-\[0\.5rem\]{
+  padding-top: 0.5rem;
 }
 
 .text-left{

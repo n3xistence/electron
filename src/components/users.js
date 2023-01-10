@@ -93,14 +93,21 @@ document.getElementById("users-menu-item").addEventListener("click", () => {
 
 document.getElementById("submit-filters").addEventListener('click', (e) => {
 	let input = document.getElementById('user-id-input');
-	if (!input.value) return alert("Please Input a User ID")
+
+  if (!input.value){ 
+    input.focus(); 
+    return alert("Please Input a User ID or name.")
+  }
 
 	ipcRenderer.send('request-userdata-full', input.value);
 });
 
 document.getElementById("user-id-input").addEventListener("keydown", (event) => {
-	let input = document.getElementById('user-id-input');
-	if (event.key === "Enter") ipcRenderer.send("request-userdata-full", input.value);
+	if (event.key !== "Enter") return;
+  let input = document.getElementById('user-id-input');
+  
+  if (!input.value) return alert("Please Input a User ID or name.")
+  ipcRenderer.send("request-userdata-full", input.value);
 });
 
 let buttonAnimation;
@@ -247,6 +254,7 @@ ipcRenderer.on("data-user-all", (e, data) => {
 });
 
 ipcRenderer.on('data-diff-weekly', (e, data) => {
+  updateUserNameContainer(data.name);
   updateStepsContainer(data);
   updateLevelsContainer(data);
   updateNPCContainer(data);
@@ -512,3 +520,11 @@ const updateTimeframeDisplay = (week1, week2) => {
   w1Display.innerText = week1Timeframe;
   w2Display.innerText = week2Timeframe;
 };
+
+const updateUserNameContainer = (name) => {
+  let div = document.getElementById('user-name-display');
+  div.innerHTML = 
+    `<div class="inline-block">User:</div>
+     <div id="last-refresh" class="inline-block">${name}</div>`
+  div.classList.add("float-left", "bg-[#343c49]", "rounded", "align-middle", "relative", "h-full", "p-2", "ml-[10px]", "text-white");
+}

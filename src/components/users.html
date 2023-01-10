@@ -67,23 +67,39 @@
     <!-- Main Content -->
     <div id="main-content"
         class="p-[20px] w-[100%] block absolute flex-wrap bg-[#2c313e] text-white top-[50px] left-0 right-0 bottom-0 tansition-transform duration-500">
-        <!-- Last Refresh Status-->
-        <div class="float-right bg-[#343c49] rounded align-middle relative h-[35px] text-white pl-[0.5rem]">
-            <div class="inline-block pl-[0.5rem]">Last Refresh:</div>
-            <div id="last-refresh" class="inline-block p-[5px] pr-[0.5rem]">Never</div>
+        <div class="px-[10px] w-full h-[40px]">
+            <!-- Username, display only when reloaded -->
+            <div id="user-name-display"></div>
+            
+            <!-- SFTP Button -->
+            <div id="sftp-elements" class="float-right">
+                <button id="request-sftp" 
+                    data-tooltip-target="tooltip-sftp-button"
+                    data-tooltip-placement="bottom"
+                    class="w-[40px] h-[40px] ml-2 bg-[#64c5b1] rounded-lg hover:bg-[#54a594] focus:outline-none">
+                    <i id='sftp-icon' class="fa-solid fa-rotate"></i>
+                </button>
+                <div id="tooltip-sftp-button" role="tooltip"
+                    class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip ">
+                    Refresh Data
+                    <div class="tooltip-arrow" data-popper-arrow></div>
+                </div>
+            </div>
+
+            <!-- Last Refresh Status-->
+            <div class="float-right bg-[#343c49] rounded align-middle relative h-full text-white p-2">
+                <div class="inline-block">Last Refresh:</div>
+                <div id="last-refresh" class="inline-block">Never</div>
+            </div>
+
+            <!-- Display for weekly timeframe -->
+            <div class="float-right mx-4 bg-[#343c49] rounded align-middle relative h-full text-white p-2">
+                <div class="inline-block">From:</div>
+                <div id="week1-display-timeframe" class="inline-block">Never</div>
+                <div class="inline-block">Until:</div>
+                <div id="week2-display-timeframe" class="inline-block">Never</div>
+            </div>
         </div>
-
-        <br></br>
-
-        <!-- Display for weekly timeframe -->
-        <div class="float-right bg-[#343c49] rounded align-middle relative h-[35px] text-white pl-[0.5rem]">
-            <div class="inline-block pl-[0.5rem]">From:</div>
-            <div id="week1-display-timeframe" class="inline-block p-[5px] pr-[0.5rem]">Never</div>
-            <div class="inline-block pl-[0.5rem]">Until:</div>
-            <div id="week2-display-timeframe" class="inline-block p-[5px] pr-[0.5rem]">Never</div>
-        </div>
-
-        <br></br>
 
         <div class="">
             <!-- General Info Containera -->
@@ -120,7 +136,8 @@
                     </div>
                 </div>
                 <div id="weeklydiff-pvp"
-                    class="flex-1 inline text-center rounded relative m-[10px] p-[1rem] min-w-[230px] max-w-[25%] h-[100px] bg-[#343c49]">
+                    class="flex-1 inline text-center rounded relative m-[10px] p-[1rem] min-w-[230px] max-w-[25%] h-[100px] bg-[#343c49]"
+                    style="margin-right: 0;">
                     <!-- Skeleton Pulse Placeholder -->
                     <div role="status" class="animate-pulse">
                         <div id="line1" class="h-2.5 bg-gray-200 rounded-full  w-[100%] mb-4"></div>
@@ -129,19 +146,6 @@
                         <span class="sr-only">Loading...</span>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- SFTP Button -->
-        <div id="sftp-elements" class="float-right">
-            <button id="request-sftp" data-tooltip-target="tooltip-sftp-button"
-                class="w-[40px] h-[40px] ml-2 bg-[#64c5b1] rounded-lg hover:bg-[#54a594] focus:outline-none">
-                <i id='sftp-icon' class="fa-solid fa-rotate"></i>
-            </button>
-            <div id="tooltip-sftp-button" role="tooltip"
-                class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip ">
-                Refresh Data
-                <div class="tooltip-arrow" data-popper-arrow></div>
             </div>
         </div>
       

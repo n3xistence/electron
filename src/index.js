@@ -83,7 +83,10 @@ const createMainWindow = () => {
 			let stamp = getTimeStamp();
 			mainWindow.webContents.send("last-sync", stamp);
 
-			let userdata = getUserAlltimeStats("261266");
+			try{
+				var userdata = getUserAlltimeStats({ id: "261266" });
+			} catch(e) { return mainWindow.webContents.send('error', e.message) }
+			
 			let weeklystats = getUserRecentWeeklyData(userdata);
 			mainWindow.webContents.send('loaded', weeklystats);
 		}
@@ -159,10 +162,17 @@ ipcMain.on("refresh-data", async (e, arg) => {
 				break;
 			case "users.html":
 				if (arg){
-					let userdata = getUserAlltimeStats(arg);
-					e.sender.send('data-user-all', userdata);
+					let user = {}
+					if (!arg.match(/\D/)) user.id = arg;
+					else user.name = arg;
+					
+					try {
+						var user_data = getUserAlltimeStats(user);
+					} catch(e) { return mainWindow.webContents.send('error', e.message) }
 
-					let weeklydata = getUserRecentWeeklyData(userdata);
+					e.sender.send('data-user-all', user_data);
+
+					let weeklydata = getUserRecentWeeklyData(user_data);
 					e.sender.send('data-diff-weekly', weeklydata);
 				}
 
@@ -222,8 +232,13 @@ ipcMain.on("request-dropdown-data", (e, data) => {
 	e.sender.send("data-live", data);
 });
 
-ipcMain.on('request-userdata-full', (e, id) => {
-	let userdata = getUserAlltimeStats(id);
+ipcMain.on('request-userdata-full', (e, arg) => {
+	let user = {}
+	if (!arg.match(/\D/)) user.id = arg;
+	else user.name = arg;
+	try {
+		var userdata = getUserAlltimeStats(user);
+	} catch(e) { return mainWindow.webContents.send('error', e.message) }
 	e.sender.send('data-user-all', userdata);
 
 	let weeklydata = getUserRecentWeeklyData(userdata);
@@ -359,11 +374,22 @@ const getPVPData = () => {
 	return pvpdata;
 };
 
-const getUserAlltimeStats = (user_id) => {
-	let linkdata = db_gen.prepare(`SELECT * FROM links WHERE SMMO_ID=?`).get(user_id);
-	if (!linkdata) throw new Error("unlinked");
+const getUserAlltimeStats = (user) => {
+	if (user.id) var linkdata = db_gen.prepare(`SELECT * FROM links WHERE SMMO_ID=?`).get(user.id);
+	else{
+		var linkdata = db_ud.prepare(`SELECT * FROM UserDataLive WHERE name LIKE '%${user.name}%'`).get();
+		if (linkdata) user.id = `${linkdata.id}`;
+	}
+	if (!linkdata){
+		dialog.showMessageBox({
+			type: "error",
+			title: "Unlinked",
+			message:
+				`There is no user in the database with the ${user.id ? "ID" : "name"} ${user.id ? user.id : user.name}.`,
+		});
+	}
 
-	let linkedsince = db_gen.prepare(`SELECT * FROM linkedsince WHERE id=?`).get(user_id);
+	let linkedsince = db_gen.prepare(`SELECT * FROM linkedsince WHERE id=?`).get(user.id);
 	if (!linkedsince) throw new Error("no linked date");
 	let date = linkedsince.date;
 
@@ -376,7 +402,8 @@ const getUserAlltimeStats = (user_id) => {
 		tasks: [],
 		bosses: [],
 		bounties: [],
-		dates: []
+		dates: [],
+		name: ""
 	}
 
 	while (
@@ -384,7 +411,7 @@ const getUserAlltimeStats = (user_id) => {
 		date !== helper.getToday()
 	){
 		try {
-			var data_now = db_ud.prepare(`SELECT * FROM ud${date.replace(/\-/g, "_")} WHERE id=?`).get(user_id);
+			var data_now = db_ud.prepare(`SELECT * FROM ud${date.replace(/\-/g, "_")} WHERE id=?`).get(user.id);
 		} catch(e) {
 			if (e.message.startsWith('no such table')) break;
 			else console.log(e);
@@ -392,13 +419,14 @@ const getUserAlltimeStats = (user_id) => {
 		if (data_now){
 			dataset.levels.push(data_now.level);
 			dataset.steps.push(data_now.steps);
-			dataset.npc.push(data_now.npc)
-			dataset.pvp.push(data_now.pvp)
-			dataset.quests.push(data_now.quests)
-			dataset.tasks.push(data_now.tasks)
-			dataset.bosses.push(data_now.bosses)
-			dataset.bounties.push(data_now.bounties)
-			dataset.dates.push(date)
+			dataset.npc.push(data_now.npc);
+			dataset.pvp.push(data_now.pvp);
+			dataset.quests.push(data_now.quests);
+			dataset.tasks.push(data_now.tasks);
+			dataset.bosses.push(data_now.bosses);
+			dataset.bounties.push(data_now.bounties);
+			dataset.dates.push(date);
+			dataset.name = data_now.name;
 		}
 		date = helper.getTomorrow(date);
 	}
@@ -472,7 +500,9 @@ const getUserRecentWeeklyData = (userdata) => {
 			bounties: [],
 			dates: [],
 		},
+		name: userdata.name
 	};
+
 	for (let i = userdata.dates.length - 1;i >= 0;i--){
 		if (weeklydata.week2.dates.length < 7){ 
 			weeklydata.week2.levels.unshift(userdata.levels[i]);
