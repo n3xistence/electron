@@ -100,22 +100,18 @@ const createMainWindow = () => {
 };
 
 ipcMain.on("open-home-page", () => {
-  console.log("Opening Home Page...");
   mainWindow.loadURL(`file://${__dirname}/components/home.html`);
 });
 
 ipcMain.on("open-stats-page", () => {
-  console.log("Opening Stats Page...");
   mainWindow.loadURL(`file://${__dirname}/components/stats.html`);
 });
 
 ipcMain.on("open-users-page", () => {
-  console.log("Opening Users Page...");
   mainWindow.loadURL(`file://${__dirname}/components/users.html`);
 });
 
 ipcMain.on("open-wars-page", () => {
-  console.log("Opening Wars Page...");
   mainWindow.loadURL(`file://${__dirname}/components/wars.html`);
 });
 
