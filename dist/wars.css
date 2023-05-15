@@ -962,10 +962,6 @@ input[type="range"]::-ms-fill-lower{
   position: absolute;
 }
 
-.\!absolute{
-  position: absolute !important;
-}
-
 .relative{
   position: relative;
 }
@@ -996,10 +992,6 @@ input[type="range"]::-ms-fill-lower{
 
 .bottom-\[50px\]{
   bottom: 50px;
-}
-
-.\!bottom-\[50px\]{
-  bottom: 50px !important;
 }
 
 .z-50{
@@ -1672,47 +1664,12 @@ input[type="range"]::-ms-fill-lower{
   transform: translate(0, -11px) rotate(45deg);
 }
 
-#main-content {
-  left: 0;
-}
-
 #menu-toggle:hover {
   background-color: #54a594
 }
 
-.sftp-elements {
-  display: flex;
-  justify-content: flex-start;
-}
-
-.menu-item {
-  padding: 20px;
-  cursor: pointer;
-}
-
-.menu-item:hover {
-  background-color: #2c313e;
-}
-
-.fa-house,
-.fa-chart-column,
-.fa-screwdriver-wrench {
-  width: 20px;
-  padding-right: 0.5rem;
-}
-
 .body {
   background-color: rgb(42, 42, 42);
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 .hover\:scale-110:hover{
