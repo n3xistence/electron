@@ -44,7 +44,7 @@ const createMainWindow = () => {
   });
 
   //initialize window
-  mainWindow.loadURL(`file://${__dirname}/components/wars.html`);
+  mainWindow.loadURL(`file://${__dirname}/components/home.html`);
 
   // mainWindow.webContents.openDevTools();
 
@@ -100,6 +100,9 @@ const createMainWindow = () => {
     } else if (pageURL === "wars.html") {
       let wars = getWarData();
       mainWindow.webContents.send("data-wars", wars);
+    } else if (pageURL === "home.html") {
+      let guildData = getGuildData();
+      mainWindow.webContents.send("data-guildstats", guildData);
     }
   });
 };
@@ -568,3 +571,6 @@ const getUserRecentWeeklyData = (userdata) => {
 };
 
 const getWarData = () => db_gen.prepare(`SELECT * FROM wars`).all();
+
+const getGuildData = () =>
+  db_gen.prepare(`SELECT * FROM guildstats WHERE id=1970`).all();

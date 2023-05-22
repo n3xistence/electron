@@ -6,6 +6,7 @@
   <link rel="stylesheet" href="../../node_modules/@fortawesome/fontawesome-free/css/all.css">
   <link rel="stylesheet" type="text/css" href="../../dist/home.css">
   <link rel="stylesheet" type="text/css" href="../../dist/menuLayout.css">
+
   <title>SMMO Guild Tools</title>
 </head>
 <body class="bg-[#2c313e]">
@@ -49,49 +50,62 @@
 
   <!-- Main Content -->
   <div id="main-content" class="p-[20px] w-[100%] block absolute bg-[#2c313e] color-[#fff] top-[50px] left-0 right-0 bottom-0 tansition-transform duration-500">
-    <div class="text-white">
+    <div class="text-white mt-4">
       <div class="p-2 text-white text-xl font-bold font-mono leading-6 rounded-lg">
         <div id="wars-title-banner"
-          class="inline p-2 text-center rounded relative m-auto bg-[#343c49]">
+          class="inline max-w-[50%] p-2 text-center rounded relative m-auto bg-[#343c49]">
           Home Page
+        </div>
+        <div class="float-right text-white font-bold font-mono leading-6 rounded-lg">
+          <div id="guild-health" class="p-2 m-2 inline text-center rounded relative bg-[#343c49]"></div>
         </div>
       </div>
 
+      
       <div class="mt-1 flex gap-4 text-white text-sm font-bold font-mono leading-6 bg-stripes-violet rounded-lg flex-wrap">
         <div id="guild-members"
-          class="flex-1 inline rounded relative m-[10px] p-[1rem] min-w-[230px] max-w-[33.33%] h-[100px] bg-[#343c49]">
+          class="flex-1 inline text-center rounded relative m-3 p-3 min-w-[230px] max-w-[50%] h-[100px] bg-[#343c49]">
           <!-- Skeleton Pulse Placeholder -->
           <div role="status" class="animate-pulse">
             <h3 id="line1" class="h-2.5 bg-gray-200 rounded-full  w-[100%] mb-4"></h3>
-            <div id="line2" class="h-2 bg-gray-200 rounded-full  max-w-[70%] mb-2.5"></div>
-            <div id="line3" class="h-2 bg-gray-200 rounded-full  max-w-[80%] mb-2.5"></div>
+            <div id="line2" class="h-2 bg-gray-200 rounded-full max-w-[70%] mb-2.5"></div>
+            <div id="line3" class="h-2 bg-gray-200 rounded-full max-w-[80%] mb-2.5"></div>
             <span class="sr-only">Loading...</span>
           </div>
         </div>
         <div id="guild-exp"
-          class="flex-1 inline text-center rounded relative m-[10px] p-[1.5rem] min-w-[230px] max-w-[33.33%] h-[100px] bg-[#343c49]">
+          class="flex-1 inline text-center rounded relative m-3 p-3 min-w-[230px] max-w-[50%] h-[100px] bg-[#343c49]">
           <!-- Skeleton Pulse Placeholder -->
           <div role="status" class="animate-pulse">
             <div id="line1" class="h-2.5 bg-gray-200 rounded-full  w-[100%] mb-4"></div>
-            <div id="line2" class="h-2 bg-gray-200 rounded-full  max-w-[90%] mb-2.5"></div>
-            <div id="line3" class="h-2 bg-gray-200 rounded-full  max-w-[85%] mb-2.5"></div>
+            <div id="line2" class="h-2 bg-gray-200 rounded-full max-w-[90%] mb-2.5"></div>
+            <div id="line3" class="h-2 bg-gray-200 rounded-full max-w-[85%] mb-2.5"></div>
             <span class="sr-only">Loading...</span>
           </div>
         </div>
-        <div 
-          class="flex-1 inline text-center rounded relative m-[10px] p-[1.5rem] min-w-[230px] max-w-[33.33%] h-[100px] bg-[#343c49]">
-          <!-- Skeleton Pulse Placeholder -->
-          <div role="status" class="animate-pulse">
-            <div id="line1" class="h-2.5 bg-gray-200 rounded-full  w-[100%] mb-4"></div>
-            <div id="line2" class="h-2 bg-gray-200 rounded-full  max-w-[75%] mb-2.5"></div>
-            <div id="line3" class="h-2 bg-gray-200 rounded-full  max-w-[95%] mb-2.5"></div>
-            <span class="sr-only">Loading...</span>
-          </div>
+    </div>
+
+    <div id="chart" class="m-[10px] clear-both">
+      <!-- Skeleton Pulse Placeholder -->
+      <div role="status" class="p-4 max-w-sm rounded border border-gray-200 shadow animate-pulse md:p-6">
+        <div class="h-2.5 bg-gray-200 rounded-full  w-32 mb-2.5"></div>
+        <div class="mb-10 w-48 h-2 bg-gray-200 rounded-full "></div>
+        <div class="flex items-baseline mt-4 space-x-6">
+          <div class="w-full h-36 bg-gray-200 rounded-t-lg "></div>
+          <div class="w-full h-24 bg-gray-200 rounded-t-lg "></div>
+          <div class="w-full h-36 bg-gray-200 rounded-t-lg "></div>
+          <div class="w-full h-24 bg-gray-200 rounded-t-lg "></div>
+          <div class="w-full h-24 bg-gray-200 rounded-t-lg "></div>
+          <div class="w-full h-36 bg-gray-200 rounded-t-lg "></div>
+          <div class="w-full h-24 bg-gray-200 rounded-t-lg "></div>
         </div>
+        <span class="sr-only">Loading...</span>
       </div>
     </div>
   </div>
 
+  <script src="https://unpkg.com/flowbite@1.5.5/dist/flowbite.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
   <script src="home.js"></script>
 </body>
 
