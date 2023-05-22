@@ -55,3 +55,12 @@
 .body {
   background-color: rgb(42, 42, 42);
 }
+
+#warlist {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+#warlist li {
+  width: 100px;
+}

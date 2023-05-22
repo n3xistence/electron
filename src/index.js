@@ -42,7 +42,7 @@ const createMainWindow = () => {
   });
 
   //initialize window
-  mainWindow.loadURL(`file://${__dirname}/components/home.html`);
+  mainWindow.loadURL(`file://${__dirname}/components/wars.html`);
 
   // mainWindow.webContents.openDevTools();
 
@@ -95,6 +95,9 @@ const createMainWindow = () => {
 
       let weeklystats = getUserRecentWeeklyData(userdata);
       mainWindow.webContents.send("loaded", weeklystats);
+    } else if (pageURL === "wars.html") {
+      let wars = getWarData();
+      mainWindow.webContents.send("data-wars", wars);
     }
   });
 };
@@ -552,10 +555,9 @@ const getUserRecentWeeklyData = (userdata) => {
       weeklydata.week1.bosses.unshift(userdata.bosses[i]);
       weeklydata.week1.bounties.unshift(userdata.bounties[i]);
       weeklydata.week1.dates.unshift(userdata.dates[i]);
-    } else {
-      i = -1;
-      continue;
-    }
+    } else i = -1;
   }
   return weeklydata;
 };
+
+const getWarData = () => db_gen.prepare(`SELECT * FROM wars`).all();
