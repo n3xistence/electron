@@ -1,0 +1,84 @@
+{
+  "name": "smmo-gt",
+  "productName": "SMMO-GT Babel",
+  "version": "0.1.0",
+  "description": "Analyze data of the guild in an easy, lightweight way.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "electron-forge start .",
+    "watch": "concurrently --kill-others \"npx tailwindcss -i ./src/modules/menuLayout.css -o ./dist/menuLayout.css --watch\"  \"nodemon --ignore ./data/ --exec electron-forge start .\"",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish"
+  },
+  "keywords": [],
+  "author": "MaxN",
+  "license": "MIT",
+  "config": {
+    "forge": {
+      "make_targets": {
+        "win32": [
+          "squirrel"
+        ],
+        "darwin": [
+          "zip"
+        ],
+        "linux": [
+          "deb",
+          "rpm"
+        ]
+      },
+      "electronPackagerConfig": {
+        "packageManager": "npm"
+      },
+      "electronWinstallerConfig": {
+        "name": "smmo_gt"
+      },
+      "electronInstallerDebian": {},
+      "electronInstallerRedhat": {},
+      "github_repository": {
+        "owner": "n3xistence",
+        "name": "https://github.com/n3xistence/electron"
+      },
+      "windowsStoreConfig": {
+        "packageName": "",
+        "name": "smmogt"
+      },
+      "publishers": [
+        {
+          "name": "@electron-forge/publisher-github",
+          "config": {
+            "repository": {
+              "owner": "your_github_username",
+              "name": "your_repository_name"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.2.1",
+    "better-sqlite3": "^8.0.1",
+    "concurrently": "^7.6.0",
+    "electron-compile": "^6.4.4",
+    "electron-squirrel-startup": "^1.0.0",
+    "flowbite": "^1.5.5",
+    "node-gyp": "^9.3.1",
+    "ssh2-sftp-client": "^9.0.4"
+  },
+  "devDependencies": {
+    "@electron-forge/publisher-github": "^6.1.1",
+    "autoprefixer": "^10.4.13",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "chart.js": "^4.1.1",
+    "electron-forge": "^5.2.4",
+    "electron-prebuilt-compile": "8.2.0",
+    "nodemon": "^2.0.20",
+    "postcss": "^8.4.20",
+    "python": "^0.0.4",
+    "tailwindcss": "^3.2.4"
+  }
+}
