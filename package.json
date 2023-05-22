@@ -49,8 +49,8 @@
           "name": "@electron-forge/publisher-github",
           "config": {
             "repository": {
-              "owner": "your_github_username",
-              "name": "your_repository_name"
+              "owner": "n3xistence",
+              "name": "smmo-gt"
             }
           }
         }
