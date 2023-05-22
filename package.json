@@ -9,8 +9,8 @@
     "watch": "concurrently --kill-others \"npx tailwindcss -i ./src/modules/menuLayout.css -o ./dist/menuLayout.css --watch\"  \"nodemon --ignore ./data/ --exec electron-forge start .\"",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
-    "build": "electron-builder build",
-    "deploy": "electron-builder build"
+    "build": "electron-builder build --verbose",
+    "deploy": "electron-builder build --verbose"
   },
   "keywords": [],
   "author": "MaxN",
