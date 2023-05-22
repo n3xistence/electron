@@ -29,6 +29,8 @@ let pageURL;
 const createMainWindow = () => {
   mainWindow = new BrowserWindow({
     width: 1200,
+    minWidth: 500,
+    minHeight: 500,
     height: 800,
     movable: true,
     titlebar: "customButtonsOnHover",
@@ -225,6 +227,11 @@ ipcMain.on("refresh-data", async (e, arg) => {
     await sftp.end();
   }
   syncInProgress = false;
+});
+
+ipcMain.on("request-war-data", (e, data) => {
+  const res = getWarData();
+  e.sender.send("data-wars", res);
 });
 
 ipcMain.on("request-dropdown-data", (e, data) => {

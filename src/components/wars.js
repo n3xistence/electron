@@ -55,6 +55,42 @@ document.getElementById("menu-toggle").addEventListener("click", () => {
   }
 });
 
+let buttonAnimation;
+document.getElementById("request-sftp").addEventListener("click", () => {
+  if (buttonAnimation) return;
+
+  buttonAnimation = document
+    .getElementById("sftp-icon")
+    .animate([{ transform: "rotate(0deg)" }, { transform: "rotate(360deg)" }], {
+      duration: 2000,
+      easing: "linear",
+      iterations: Infinity,
+    });
+
+  //set all elements to skeleton pulse placeholders for the remainder of the sync
+  let containers = [
+    document.getElementById("wars-winning"),
+    document.getElementById("wars-tied"),
+    document.getElementById("wars-losing"),
+  ];
+  containers.forEach((container) => {
+    container.innerHTML = addSkeletonPulse_Container(container);
+  });
+
+  //request the new data
+  ipcRenderer.send("refresh-data");
+});
+
+ipcRenderer.on("sftp-connected", () => {});
+
+ipcRenderer.on("data-fetched", () => {
+  if (buttonAnimation) {
+    buttonAnimation.cancel();
+    buttonAnimation = null;
+  }
+  ipcRenderer.send("request-war-data");
+});
+
 let tableSortingOptions = {
   g1Name: false,
   g2Name: false,
@@ -71,6 +107,10 @@ const resetSortingOptions = () => {
 let warData;
 ipcRenderer.on("data-wars", (e, data) => {
   warData = data;
+  updateWinningWarsContainer(warData);
+  updateTiedWarsContainer(warData);
+  updateLosingWarsContainer(warData);
+
   const { winning, losing, ties } = compileWarStats(warData);
 
   let parent = document.getElementById("warlist");
@@ -109,21 +149,6 @@ ipcRenderer.on("data-wars", (e, data) => {
         h.innerHTML = `${h.innerHTML} ${newSort === "asc" ? " ▼" : " ▲"}`;
       }
     });
-
-    // let indicator = e.target.textContent[e.target.textContent.length - 1];
-
-    // if (indicator !== "▼" && indicator !== "▲") {
-    //   e.target.textContent += " ▼";
-    // } else {
-    //   e.target.textContent = e.target.textContent.replace(
-    //     /.$/,
-    //     `${
-    //       e.target.textContent[e.target.textContent.length - 1] === "▲"
-    //         ? "▼"
-    //         : "▲"
-    //     }`
-    //   );
-    // }
   });
 });
 
@@ -192,12 +217,12 @@ const makeWarListFragment = (list) => {
 };
 
 const makeWarListElement = (list) => {
-  return `<table id="war-table" class="table-fixed rounded relative bg-[#343c49] m-auto">
+  return `<table id="war-table" class="text-lg table-fixed rounded relative bg-[#343c49] m-auto">
     <tr>
-      <td id="table-headers" class="cursor-pointer font-bold px-2 text-right border-r-2 border-gray-800">Initiator</td>
-      <td id="table-headers" class="cursor-pointer font-bold px-2 text-right border-r-2 border-gray-800">Initiator Kills</td>
-      <td id="table-headers" class="cursor-pointer font-bold px-2 text-left border-r-2 border-gray-800">Defender Kills</td>
-      <td id="table-headers" class="cursor-pointer font-bold px-2 text-left">Defender</td>
+      <td id="table-headers" class="cursor-pointer font-bold px-2 text-right border-r-2  border-b-2 border-gray-800">Initiator</td>
+      <td id="table-headers" class="cursor-pointer font-bold px-2 text-right border-r-2  border-b-2 border-gray-800">Initiator Kills</td>
+      <td id="table-headers" class="cursor-pointer font-bold px-2 text-left border-r-2  border-b-2 border-gray-800">Defender Kills</td>
+      <td id="table-headers" class="cursor-pointer font-bold px-2 text-left  border-b-2 border-gray-800">Defender</td>
     </tr>
     ${list
       .map((e) => {
@@ -262,4 +287,151 @@ const compileWarStats = (warList, options = {}) => {
   losing.sort((a, b) => losingSort(a, b, loseInverse));
 
   return { winning, losing, ties };
+};
+
+const updateWinningWarsContainer = (data) => {
+  let child = document.getElementById("wars-winning");
+
+  let winningWars = data.filter((e) => {
+    return e.guild_1_id === 1970
+      ? e.guild_1_kills > e.guild_2_kills
+      : e.guild_2_kills > e.guild_1_kills;
+  });
+
+  let ratio = (winningWars.length / data.length) * 100;
+
+  child.innerHTML = `<div class="float-left whitespace-nowrap w-[50%]">
+      <div class="text-left text-lg">Winning Wars (${ratio.toFixed(2)}%)</div>
+      <div class="text-left">Total: ${data.length}</div>
+      <div class="text-left">Winning: ${winningWars.length}</div>
+    </div>
+    <div class='float-right w-[50%] h-[100%] flex items-center'>
+      <canvas id='wars-winning-graph' class='max-w-[68px] ml-auto mr-0 hover:scale-110 tansition-transform duration-200'></canvas>
+    </div>
+    `;
+
+  let ctx = document.getElementById("wars-winning-graph").getContext("2d");
+  new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels: ["Winning Wars", "Total Wars"],
+      datasets: [
+        {
+          label: "Winning Wars",
+          data: [winningWars.length, data.length - winningWars.length],
+          backgroundColor: [
+            "rgba(47, 75, 124, 0.2)",
+            "rgba(249, 93, 106, 0.2)",
+          ],
+          borderColor: ["rgba(47, 75, 124, 1)", "rgba(249, 93, 106, 1)"],
+          hoverOffset: 4,
+        },
+      ],
+    },
+    options: {
+      legend: {
+        display: false,
+      },
+      maintainAspectRatio: false,
+    },
+  });
+};
+const updateTiedWarsContainer = (data) => {
+  let child = document.getElementById("wars-tied");
+
+  let tiedWars = data.filter((e) => e.guild_1_kills === e.guild_2_kills);
+
+  let ratio = (tiedWars.length / data.length) * 100;
+
+  child.innerHTML = `<div class="float-left whitespace-nowrap w-[50%]">
+      <div class="text-left text-lg">Tied Wars (${ratio.toFixed(2)}%)</div>
+      <div class="text-left">Total: ${data.length}</div>
+      <div class="text-left">Tied: ${tiedWars.length}</div>
+    </div>
+    <div class='float-right w-[50%] h-[100%] flex items-center'>
+      <canvas id='wars-tied-graph' class='max-w-[68px] ml-auto mr-0 hover:scale-110 tansition-transform duration-200'></canvas>
+    </div>
+    `;
+
+  let ctx = document.getElementById("wars-tied-graph").getContext("2d");
+  new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels: ["Tied Wars", "Total Wars"],
+      datasets: [
+        {
+          label: "Tied Wars",
+          data: [tiedWars.length, data.length - tiedWars.length],
+          backgroundColor: [
+            "rgba(47, 75, 124, 0.2)",
+            "rgba(249, 93, 106, 0.2)",
+          ],
+          borderColor: ["rgba(47, 75, 124, 1)", "rgba(249, 93, 106, 1)"],
+          hoverOffset: 4,
+        },
+      ],
+    },
+    options: {
+      legend: {
+        display: false,
+      },
+      maintainAspectRatio: false,
+    },
+  });
+};
+const updateLosingWarsContainer = (data) => {
+  let child = document.getElementById("wars-losing");
+
+  let losingWars = data.filter((e) => {
+    return e.guild_1_id === 1970
+      ? e.guild_1_kills < e.guild_2_kills
+      : e.guild_2_kills < e.guild_1_kills;
+  });
+
+  let ratio = (losingWars.length / data.length) * 100;
+
+  child.innerHTML = `<div class="float-left whitespace-nowrap w-[50%]">
+      <div class="text-left text-lg">Losing Wars (${ratio.toFixed(2)}%)</div>
+      <div class="text-left">Total: ${data.length}</div>
+      <div class="text-left">Losing: ${losingWars.length}</div>
+    </div>
+    <div class='float-right w-[50%] h-[100%] flex items-center'>
+      <canvas id='wars-losing-graph' class='max-w-[68px] ml-auto mr-0 hover:scale-110 tansition-transform duration-200'></canvas>
+    </div>
+    `;
+
+  let ctx = document.getElementById("wars-losing-graph").getContext("2d");
+  new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels: ["Losing Wars", "Total Wars"],
+      datasets: [
+        {
+          label: "Losing Wars",
+          data: [losingWars.length, data.length - losingWars.length],
+          backgroundColor: [
+            "rgba(47, 75, 124, 0.2)",
+            "rgba(249, 93, 106, 0.2)",
+          ],
+          borderColor: ["rgba(47, 75, 124, 1)", "rgba(249, 93, 106, 1)"],
+          hoverOffset: 4,
+        },
+      ],
+    },
+    options: {
+      legend: {
+        display: false,
+      },
+      maintainAspectRatio: false,
+    },
+  });
+};
+
+const addSkeletonPulse_Container = (tag) => {
+  return `<div role="status" class="animate-pulse">
+				<h3 id="line1" class="h-2.5 bg-gray-200 rounded-full  w-[100%] mb-4"></h3>
+				<div id="line2" class="h-2 bg-gray-200 rounded-full  max-w-[70%] mb-2.5"></div>
+				<div id="line3" class="h-2 bg-gray-200 rounded-full  max-w-[80%] mb-2.5"></div>
+				<span class="sr-only">Loading...</span>
+			</div>`;
 };
