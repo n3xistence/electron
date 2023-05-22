@@ -6,10 +6,10 @@ import fs from "fs";
 import config from "./config/sftp";
 
 //remove for production
-import tailwind from "tailwindcss";
-module.exports = {
-  plugins: [tailwind("./tailwind.config.js")],
-};
+// import tailwind from "tailwindcss";
+// module.exports = {
+//   plugins: [tailwind("./tailwind.config.js")],
+// };
 
 if (fs.existsSync("./data")) {
   if (fs.existsSync("./data/userdata.db") && fs.existsSync("./data/data.db")) {

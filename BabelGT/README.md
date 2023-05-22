@@ -1,2 +1,0 @@
-# electron
-Learning Eletron.js
