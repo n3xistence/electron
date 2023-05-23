@@ -25,6 +25,11 @@
       "src/**/**",
       "dist/**"
     ],
+    "publish": {
+      "provider": "github",
+      "owner": "n3xistence",
+      "repo": "smmo-gt"
+    },
     "win": {
       "target": "nsis"
     },
