@@ -2,7 +2,8 @@ const { ipcRenderer } = require("electron");
 const Router = require("../modules/router");
 const menuLayout = require("../modules/menuLayout");
 
-document.getElementById("menu").innerHTML = menuLayout.layout("stats");
+const menu = new menuLayout();
+document.getElementById("menu").innerHTML = menu.layout("stats");
 
 Router.routes();
 

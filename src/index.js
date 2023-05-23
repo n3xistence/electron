@@ -11,10 +11,11 @@ import config from "./config/sftp";
 //   plugins: [tailwind("./tailwind.config.js")],
 // };
 
+let db_gen, db_ud;
 if (fs.existsSync("./data")) {
   if (fs.existsSync("./data/userdata.db") && fs.existsSync("./data/data.db")) {
-    var db_gen = new sqlite3(`./data/data.db`);
-    var db_ud = new sqlite3(`./data/userdata.db`);
+    db_gen = new sqlite3(`./data/data.db`);
+    db_ud = new sqlite3(`./data/userdata.db`);
     db_gen.pragma("journal_mode = WAL");
     db_ud.pragma("journal_mode = WAL");
   }
@@ -40,6 +41,8 @@ const createMainWindow = () => {
     nodeIntegration: true,
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
     },
   });
 
@@ -71,10 +74,21 @@ const createMainWindow = () => {
     )
       return;
 
+    dialog.showMessageBox({
+      type: "error",
+      title: "Hello",
+      message: "ya",
+    });
+
     let history = window.sender.history;
     let pages = history[history.length - 1].split("/");
     pageURL = pages[pages.length - 1];
 
+    dialog.showMessageBox({
+      type: "error",
+      title: "message2",
+      message: "ya",
+    });
     if (pageURL === "stats.html") {
       let leveldata = getLevelData();
       leveldata.type = "level";

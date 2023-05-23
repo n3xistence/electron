@@ -3,7 +3,8 @@ const helper = require("../ext/helper");
 const Router = require("../modules/router");
 const menuLayout = require("../modules/menuLayout");
 
-document.getElementById("menu").innerHTML = menuLayout.layout("users");
+const menu = new menuLayout();
+document.getElementById("menu").innerHTML = menu.layout("users");
 
 Router.routes();
 

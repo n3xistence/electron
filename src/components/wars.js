@@ -2,7 +2,8 @@ const { ipcRenderer } = require("electron");
 const Router = require("../modules/router");
 const menuLayout = require("../modules/menuLayout");
 
-document.getElementById("menu").innerHTML = menuLayout.layout("wars");
+const menu = new menuLayout();
+document.getElementById("menu").innerHTML = menu.layout("wars");
 
 Router.routes();
 
@@ -104,17 +105,24 @@ const resetSortingOptions = () => {
   }
 };
 
+console.log("Pre War Data Event");
 let warData;
 ipcRenderer.on("data-wars", (e, data) => {
+  console.log(data);
   warData = data;
+  console.log("Mid War Data Event #0");
   updateWinningWarsContainer(warData);
   updateTiedWarsContainer(warData);
   updateLosingWarsContainer(warData);
+
+  console.log("Mid War Data Event #1");
 
   const { winning, losing, ties } = compileWarStats(warData);
 
   let parent = document.getElementById("warlist");
   parent.innerHTML = makeWarListElement(winning);
+
+  console.log("Mid War Data Event #2");
 
   parent.addEventListener("click", (e) => {
     if (e.target.id !== "table-headers") return;
@@ -122,6 +130,8 @@ ipcRenderer.on("data-wars", (e, data) => {
       warData,
       e.target.textContent.replace(" ▼", "").replace(" ▲", "").trim()
     );
+
+    console.log("Mid War Data Event #3");
 
     let rows = parent.querySelectorAll("tr");
     for (let i = 1; i < rows.length; i++) {
@@ -151,6 +161,8 @@ ipcRenderer.on("data-wars", (e, data) => {
     });
   });
 });
+
+console.log("Checkpoint Pre Functions");
 
 const sortTableByHeader = (list, header) => {
   const sortNumsByKey = (a, b, key, inverse = false) =>
