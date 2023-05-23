@@ -29,7 +29,7 @@ jobs:
         run: yarn build
 
       - name: Release application
-        uses: samuelmeuli/action-electron-builder@v2
+        uses: samuelmeuli/action-electron-builder@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           mac_certs: ${{ secrets.MAC_CERTS }}
