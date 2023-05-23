@@ -1,7 +1,7 @@
 {
   "name": "smmo-gt",
   "productName": "SMMO-GT Babel",
-  "version": "0.1.0",
+  "version": "0.0.4",
   "description": "Analyze data of the guild in an easy, lightweight way.",
   "main": "src/index.js",
   "scripts": {
@@ -10,7 +10,8 @@
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "build": "electron-builder build",
-    "deploy": "electron-builder build"
+    "deploy": "electron-builder build",
+    "publish": "electron-forge publish"
   },
   "keywords": [],
   "author": "MaxN",
@@ -22,6 +23,7 @@
       "output": "out"
     },
     "files": [
+      "src/**",
       "src/**/**",
       "dist/**"
     ],
@@ -39,6 +41,10 @@
     "linux": {
       "target": "AppImage"
     }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/n3xistence/smmo-gt.git"
   },
   "config": {
     "forge": {
@@ -62,6 +68,7 @@
     "electron-compile": "^6.4.4",
     "electron-squirrel-startup": "^1.0.0",
     "flowbite": "^1.5.5",
+    "node-abi": "^3.40.0",
     "node-gyp": "^9.3.1",
     "ssh2-sftp-client": "^9.0.4"
   },
