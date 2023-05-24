@@ -20,7 +20,8 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 14
-      - uses: microsoft/setup-msbuild@v1.0.2
+      - name: Install Visual Studio Build Tools
+        uses: microsoft/setup-msbuild@v1.0.2
         with:
           vs-version: "16.0"
           include-prerelease: true # optional
