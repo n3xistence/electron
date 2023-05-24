@@ -20,8 +20,10 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 14
-      - name: Install VSBuild Tools
-        run: npm install -g vsbuild
+      - uses: microsoft/setup-msbuild@v1.0.2
+        with:
+          vs-version: "16.0"
+          include-prerelease: true # optional
       - name: Install dependencies
         run: npm i
       - name: Verify dependencies
