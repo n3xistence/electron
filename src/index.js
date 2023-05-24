@@ -68,27 +68,13 @@ const createMainWindow = () => {
   });
 
   mainWindow.webContents.on("did-finish-load", (window) => {
-    if (
-      !fs.existsSync("data/userdata.db") ||
-      !fs.existsSync("data/userdata.db")
-    )
+    if (!fs.existsSync("data/userdata.db") || !fs.existsSync("data/data.db"))
       return;
 
-    dialog.showMessageBox({
-      type: "error",
-      title: "Hello",
-      message: "ya",
-    });
-
-    let history = window.sender.history;
-    let pages = history[history.length - 1].split("/");
+    let history = mainWindow.webContents.getURL();
+    let pages = history.split("/");
     pageURL = pages[pages.length - 1];
 
-    dialog.showMessageBox({
-      type: "error",
-      title: "message2",
-      message: "ya",
-    });
     if (pageURL === "stats.html") {
       let leveldata = getLevelData();
       leveldata.type = "level";

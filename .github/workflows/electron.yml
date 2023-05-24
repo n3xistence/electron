@@ -21,6 +21,8 @@ jobs:
         with:
           node-version: 14
       - name: Install dependencies
+        run: npm i
+      - name: Verify dependencies
         run: npm ci
       - name: Install VSBuild Tools
         run: npm install --global windows-build-tools
