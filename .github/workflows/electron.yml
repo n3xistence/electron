@@ -26,7 +26,7 @@ jobs:
         with:
           vs-version: 16
       - name: Set MSB ENV
-        run: SET VCINSTALLDIR="C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\"
+        run: SET VCINSTALLDIR=C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\
       - name: Set MSB npm
         run: npm config set msvs_version 2022
       - name: Install dependencies
