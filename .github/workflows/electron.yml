@@ -25,8 +25,8 @@ jobs:
         uses: microsoft/setup-msbuild@v1.0.2
         with:
           vs-version: 16
-      - name: Set MSB ENV
-        run: set VCINSTALLDIR=C:\Program Files\Microsoft Visual Studio\2022\Community\VC\
+      # - name: Set MSB ENV
+      #   run: set VCINSTALLDIR=C:\Program Files\Microsoft Visual Studio\2022\
       - name: Set MSB npm
         run: npm config set msvs_version 2022
       - name: Install dependencies
