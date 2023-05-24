@@ -23,8 +23,11 @@ jobs:
       - name: Install Visual Studio Build Tools
         uses: microsoft/setup-msbuild@v1.0.2
         with:
-          vs-version: "16.0"
-          include-prerelease: true # optional
+          vs-version: 2022
+      - name: Set MSV ENV
+        run: |
+          set GYP_MSVS_VERSION=2022
+          msbuild MyProject.csproj /p:Configuration=Release /p:Platform=x64 /p:VisualStudioVersion=16.0
       - name: Install dependencies
         run: npm i
       - name: Verify dependencies
