@@ -23,10 +23,10 @@ jobs:
       - name: Install Visual Studio Build Tools
         uses: microsoft/setup-msbuild@v1.0.2
         with:
-          vs-version: "16.0"
+          vs-version: "2017"
       - name: Set MSV ENV
         run: |
-          set GYP_MSVS_VERSION=2022
+          set GYP_MSVS_VERSION=2017
       - name: Install dependencies
         run: npm i
       - name: Verify dependencies
